@@ -61,7 +61,7 @@ async Task<string[]> GetPropertyAsync<T>()
 }
 app.Run();
 
-[JsonSerializable(typeof(Person))]
+//[JsonSerializable(typeof(Person))]
 [JsonSerializable(typeof(string[]))]
 [JsonSerializable(typeof(TypeModel[]))]
 public partial class AppJsonSerializerContext : JsonSerializerContext
