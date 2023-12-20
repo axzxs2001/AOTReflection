@@ -1,0 +1,11 @@
+@APITest_HostAddress = http://localhost:5267
+
+GET {{APITest_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{APITest_HostAddress}}/todos/1
+Accept: application/json
+
+###

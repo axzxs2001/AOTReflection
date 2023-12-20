@@ -1,0 +1,19 @@
+[
+   {
+      "TypeName":"Todo",
+      "Properties":[
+         "EqualityContract",
+         "Id",
+         "Title",
+         "DueBy",
+         "IsComplete"
+      ],
+      "Types":[
+         "Type",
+         "Int32",
+         "String",
+         "Nullable",
+         "Boolean"
+      ]
+   }
+]
