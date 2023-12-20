@@ -2,60 +2,36 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Text;
 using System.Runtime;
+using System.IO;
+using System.Reflection;
+using System;
 
 namespace TypeMemberGenerator
 {
     [Generator]
     public class MemberGenerator : ISourceGenerator
     {
+        public void Initialize(GeneratorInitializationContext context)
+        {
+        }
         public void Execute(GeneratorExecutionContext context)
         {
             try
             {
-                var path = "";
-                var mainMethod = context.Compilation.GetEntryPoint(context.CancellationToken);
-                foreach (var location in mainMethod.ContainingModule.Locations)
-                {
-                    if (location.GetLineSpan().Path.ToLower().Contains("program.cs"))
-                    {
-                        path = Path.GetDirectoryName(location.GetLineSpan().Path);
-                        break;
-                    }
-                }
-                var content = """
-                	<ItemGroup>
-                  		<None Remove="typemember.json" />
-                	</ItemGroup>
-                	<ItemGroup>
-                  		<EmbeddedResource Include="typemember.json" />
-                	</ItemGroup>
-                """;
-
-                foreach (var filePath in Directory.GetFiles(path, "*.csproj"))
-                {
-                    if (!File.ReadAllText(filePath).Contains("typemember.json"))
-                    {
-                        var list = new List<string>(File.ReadAllLines(filePath));
-                        list.Insert(list.Count - 1, content);
-                        File.WriteAllLines(filePath, list);
-                    }
-                }
-
-
+                var path = GetPath(context);
+                AddJsonToCsProj(path);
                 var typeModels = new List<TypeModel>();
-                foreach (var typename in GetAllTypeFullNames(context.Compilation))
+                foreach (var typeName in GetAllTypeFullNames(context.Compilation))
                 {
-                    if (typename.ToLower().Contains("program"))
-                    {
-                        continue;
-                    }
-                    var myType = context.Compilation.Assembly.GetTypeByMetadataName(typename);
+
+                    var myType = context.Compilation.Assembly.GetTypeByMetadataName(typeName);
                     if (myType == null)
                     {
                         continue;
                     }
+
                     var typeModel = new TypeModel();
-                    typeModel.TypeName = typename;
+                    typeModel.TypeName = typeName;
                     typeModel.Properties = new List<string>();
                     typeModel.Types = new List<string>();
                     foreach (var member in myType.GetMembers())
@@ -63,8 +39,8 @@ namespace TypeMemberGenerator
                         if (member.Kind == SymbolKind.Property)
                         {
                             var pro = member as IPropertySymbol;
-                            typeModel.Properties.Add($"{member.Name}");
-                            typeModel.Types.Add($"{pro.Type.Name}");
+                            typeModel.Properties.Add($"{pro?.Name}");
+                            typeModel.Types.Add($"{pro?.Type.Name}");
                         }
                     }
                     if (typeModel.Properties.Count > 0)
@@ -79,6 +55,23 @@ namespace TypeMemberGenerator
                 File.WriteAllText(@"C:\MyFile\temp\error.txt", exc.Message);
             }
 
+        }
+        string GetPath(GeneratorExecutionContext context)
+        {
+            var path = "";
+            var mainMethod = context.Compilation.GetEntryPoint(context.CancellationToken);
+            if (mainMethod != null)
+            {
+                foreach (var location in mainMethod.ContainingModule.Locations)
+                {
+                    if (location.GetLineSpan().Path.ToLower().Contains("program.cs"))
+                    {
+                        path = Path.GetDirectoryName(location.GetLineSpan().Path);
+                        break;
+                    }
+                }
+            }
+            return path;
         }
         void SavaJson(List<TypeModel> typeModels, string filePath)
         {
@@ -110,11 +103,35 @@ namespace TypeMemberGenerator
             File.WriteAllText(filePath, jsonSB.ToString());
         }
 
-
-        public void Initialize(GeneratorInitializationContext context)
+        void AddJsonToCsProj(string path)
         {
+            var content = """
+                	<ItemGroup>
+                  		<None Remove="typemember.json" />
+                	</ItemGroup>
+                	<ItemGroup>
+                  		<EmbeddedResource Include="typemember.json" />
+                	</ItemGroup>
+                """
+            ;
+
+            foreach (var filePath in Directory.GetFiles(path, "*.csproj"))
+            {
+                if (!File.ReadAllText(filePath).Contains("typemember.json"))
+                {
+                    var list = new List<string>(File.ReadAllLines(filePath));
+                    list.Insert(list.Count - 1, content);
+                    File.WriteAllLines(filePath, list);
+                }
+            }
         }
 
+
+        /// <summary>
+        /// 获取类型的全名
+        /// </summary>
+        /// <param name="compilation"></param>
+        /// <returns></returns>
         IEnumerable<string> GetAllTypeFullNames(Compilation compilation)
         {
             List<string> fullNames = new List<string>();
@@ -133,44 +150,41 @@ namespace TypeMemberGenerator
                     }
                 }
             }
-
             return fullNames;
-        }
-
-        string GetFullMetadataName(ISymbol s)
-        {
-            if (s == null || IsRootNamespace(s))
+            string GetFullMetadataName(ISymbol s)
             {
-                return string.Empty;
-            }
-
-            var sb = new System.Text.StringBuilder(s.MetadataName);
-            var last = s;
-
-            s = s.ContainingSymbol;
-
-            while (!IsRootNamespace(s))
-            {
-                if (s is ITypeSymbol && last is ITypeSymbol)
+                if (s == null || IsRootNamespace(s))
                 {
-                    sb.Insert(0, '+');
-                }
-                else
-                {
-                    sb.Insert(0, '.');
+                    return string.Empty;
                 }
 
-                sb.Insert(0, s.MetadataName);
-                last = s;
+                var sb = new System.Text.StringBuilder(s.MetadataName);
+                var last = s;
+
                 s = s.ContainingSymbol;
+
+                while (!IsRootNamespace(s))
+                {
+                    if (s is ITypeSymbol && last is ITypeSymbol)
+                    {
+                        sb.Insert(0, '+');
+                    }
+                    else
+                    {
+                        sb.Insert(0, '.');
+                    }
+
+                    sb.Insert(0, s.MetadataName);
+                    last = s;
+                    s = s.ContainingSymbol;
+                }
+
+                return sb.ToString();
             }
-
-            return sb.ToString();
-        }
-
-        bool IsRootNamespace(ISymbol symbol)
-        {
-            return symbol is INamespaceSymbol n && n.IsGlobalNamespace;
+            bool IsRootNamespace(ISymbol symbol)
+            {
+                return symbol is INamespaceSymbol n && n.IsGlobalNamespace;
+            }
         }
     }
     class TypeModel
