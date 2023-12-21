@@ -1,10 +1,7 @@
-using System.Reflection;
-using System.Text.Json;
-using System;
 using System.Text.Json.Serialization;
 using System.Text;
 using APITest.Models;
-using Microsoft.AspNetCore.Http.Connections;
+using AOTReflectionHelper;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -14,91 +11,78 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 var app = builder.Build();
-app.MapGet("/refstring", async () =>
+app.MapGet("/test", () =>
 {
-    var person = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } };
-    return await GetStringAsync(person);
+    var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } };
+    InvockMethod(order);
+    return GetString(order);
 
 });
-app.MapPost("/refstring", async (Person person) =>
-{   
-    return await GetStringAsync(person);
-});
-async Task<string> GetStringAsync<T>(T t) where T : Ent
+app.MapPost("/test", (Person person) =>
 {
-    Console.WriteLine(t.GetType().FullName);
+    return GetString(person);
+});
+string GetString<T>(T t) where T : Parent
+{
     var sb = new StringBuilder();
     var pros = typeof(T)?.GetProperties();
     foreach (var pro in pros)
-    {
-        Console.WriteLine(pro.Name);
+    {      
         if (pro != null)
         {
-            sb.Append($"{pro?.Name}:{pro?.GetValue(t)};");
+            if (pro.PropertyType.IsArray)
+            {
+                var arr = pro.GetValue(t) as string[];
+                sb.Append($"{pro?.Name}:{string.Join(",", arr)};");
+            }
+            else
+            {
+                sb.Append($"{pro?.Name}:{pro?.GetValue(t)};");
+            }
         }
     }
-    t.Print();
+    t.Print(sb.ToString());
     return sb.ToString();
 }
 
-
-app.MapGet("/ref", async () =>
+void InvockMethod<T>(T t)
 {
-    return await GetPropertyAsync<Person>();
-});
-async Task<string[]> GetPropertyAsync<T>()
-{
-    var assembly = Assembly.GetExecutingAssembly();
-    var stream = assembly.GetManifestResourceStream("APITest.typemember.json");
-    var reader = new StreamReader(stream!);
-    var json = await reader.ReadToEndAsync();
-    var jsonSerializerOptions = new JsonSerializerOptions()
-    {
-        TypeInfoResolver = AppJsonSerializerContext.Default,
-    };
-    var typeModels = JsonSerializer.Deserialize<TypeModel[]>(json, jsonSerializerOptions);
-    return typeModels.SingleOrDefault(s => s.TypeName == typeof(T).FullName).Properties.ToArray();
+    var method = typeof(T)?.GetMethod("Print");
+    method?.Invoke(t, new object[] { "用反射调用Print" });
 }
 app.Run();
 
-//[JsonSerializable(typeof(Person))]
+[JsonSerializable(typeof(Person))]
 [JsonSerializable(typeof(string[]))]
-[JsonSerializable(typeof(TypeModel[]))]
 public partial class AppJsonSerializerContext : JsonSerializerContext
 {
-
 }
-
-public class TypeModel
+public partial class Parent
 {
-    public string TypeName { get; set; }
-    public List<string> Properties { get; set; }
-    public List<string> Types { get; set; }
+    public void Print(string content)
+    {      
+        Console.WriteLine($"反射类型名：{GetType().Name}，Print参数：{content}");
+    }
 }
-public partial class Order: Ent
+
+[AOTReflection]
+public partial class Order : Parent
 {
     public string Name { get; set; }
     public int Age { get; set; }
     public DateTime Birthday { get; set; }
     public string[] Hobbies { get; set; }
-
 }
+
 namespace APITest.Models
 {
-    public partial class Person: Ent
+    [AOTReflection]
+    public class Person : Parent
     {
         public string Name { get; set; }
         public int Age { get; set; }
         public DateTime Birthday { get; set; }
         public string[] Hobbies { get; set; }
 
-    }
-}
-
-public partial class Ent
-{
-    public void Print()
-    {
-        Console.WriteLine(this.GetType().Name);
     }
 }

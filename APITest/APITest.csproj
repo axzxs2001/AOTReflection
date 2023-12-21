@@ -9,7 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ReflectionGenerator\ReflectionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\AOTReflectionGenerator\AOTReflectionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\AOTReflectionHelper\AOTReflectionHelper.csproj" />
+		<!--<ProjectReference Include="..\ReflectionGenerator\ReflectionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
 		<!--<ProjectReference Include="..\TypeMemberGenerator\TypeMemberGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
 	</ItemGroup>
 </Project>
