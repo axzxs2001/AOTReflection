@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionGenerator", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper", "AOTReflectionHelper\AOTReflectionHelper.csproj", "{9211704A-5A0E-4B7B-B2F5-19C05614CFE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperAOTAPITest", "DapperAOTAPITest\DapperAOTAPITest.csproj", "{F1E4E265-CC14-440F-9034-2D9E7F2E4963}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperAOTGenerator", "DapperAOTGenerator\DapperAOTGenerator.csproj", "{97C6F2D3-6F6B-45F7-B52E-7B36577D7C57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{9211704A-5A0E-4B7B-B2F5-19C05614CFE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9211704A-5A0E-4B7B-B2F5-19C05614CFE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9211704A-5A0E-4B7B-B2F5-19C05614CFE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E4E265-CC14-440F-9034-2D9E7F2E4963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E4E265-CC14-440F-9034-2D9E7F2E4963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E4E265-CC14-440F-9034-2D9E7F2E4963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E4E265-CC14-440F-9034-2D9E7F2E4963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C6F2D3-6F6B-45F7-B52E-7B36577D7C57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C6F2D3-6F6B-45F7-B52E-7B36577D7C57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C6F2D3-6F6B-45F7-B52E-7B36577D7C57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C6F2D3-6F6B-45F7-B52E-7B36577D7C57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
