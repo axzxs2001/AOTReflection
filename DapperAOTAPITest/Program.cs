@@ -1,9 +1,11 @@
-using Dapper;
-using Microsoft.Data.SqlClient;
+using DapperAOTAPITest.Model;
+using DapperAOTAPITest.Respository;
+using DapperAOTAPITest.Service;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
-
+builder.Services.AddScoped<ITodoRespository, TodoRespository>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
@@ -12,25 +14,23 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 
 
-app.MapGet("/", () =>
+app.MapGet("/", (ITodoService service) =>
 {
-    using (var conn = new SqlConnection("Data Source=.;Initial Catalog=Test;Integrated Security=True"))
+    try
     {
-        var todos = conn.Query<Todo>("select * from Todo");
-        return todos;
+        return new RequestResult { Data = service.Query<Todo>()?.ToList(), Message = "" };
+    }
+    catch (Exception ex)
+    {
+        return new RequestResult { Data = new List<Todo>(), Message = ex.Message };
     }
 });
 
-
 app.Run();
 
-
-[JsonSerializable(typeof(Todo[]))]
+[JsonSerializable(typeof(RequestResult))]
+[JsonSerializable(typeof(IEnumerable<Todo>))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
+}
 
-}
-class Todo
-{
-    public int ID { get; set; }
-}

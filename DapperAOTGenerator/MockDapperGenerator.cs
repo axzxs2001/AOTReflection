@@ -1,8 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DapperAOTGenerator
 {
@@ -11,57 +12,136 @@ namespace DapperAOTGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
-            // 在此处可以添加一些初始化逻辑
+            // 注册一个语法树遍历器，用于在语法树中查找目标方法调用
+            context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var content = "";
-            SyntaxTree syntaxTree = GetCallingSyntaxTree(context);
-
-            if (syntaxTree != null)
+            // 获取 SyntaxReceiver 实例
+            if (!(context.SyntaxReceiver is SyntaxReceiver syntaxReceiver))
+                return;
+            // 获取编译时的语法树
+            var compilation = context.Compilation;
+            var list = new List<(string FilePath, int Line, int Column)>();
+            // 遍历语法树
+            foreach (var syntaxTree in compilation.SyntaxTrees)
             {
-                // 获取调用位置的路径、行和列信息
-                FileLinePositionSpan lineSpan = syntaxTree.GetLineSpan(syntaxTree.GetRoot().FullSpan);
-                string filePath = lineSpan.Path;
-                int startLine = lineSpan.StartLinePosition.Line + 1;
-                int startColumn = lineSpan.StartLinePosition.Character + 1;
+                // 获取语法树的根节点
+                var root = syntaxTree.GetRoot();
+                // 获取所有符合条件的方法调用节点
+                var methodCalls = syntaxReceiver.CollectMethodCalls(root);
+                foreach (var methodCall in methodCalls)
+                {
+                    // 获取调用方的文件路径
+                    var filePath = syntaxTree.FilePath;
+                    try
+                    {
+                        // 获取调用方的行号和列号
+                        var position = syntaxTree.GetLineSpan(methodCall.Span);
+                        var line = position.StartLinePosition.Line + 1;
+                        var column = position.StartLinePosition.Character + 1 + methodCall.GetText().ToString().IndexOf("Query");
+                        // 获取方法调用的符号信息
+                        var methodSymbol = compilation.GetSemanticModel(syntaxTree).GetSymbolInfo(methodCall).Symbol as IMethodSymbol;
 
-                // 在这里可以使用获取到的路径、行和列信息进行处理
-               content+=($"Query method called in {filePath} at line {startLine}, column {startColumn}");
+                        if (methodSymbol != null && methodSymbol.IsExtensionMethod && methodSymbol.ReducedFrom != null)
+                        {
+                            // 获取调用方的类型
+                            var callingType = methodSymbol.ReducedFrom.ReceiverType;
+
+                            if (callingType != null)
+                            {
+                                // 判断是否是 Dapper 的扩展方法
+                                if (callingType.Name == "SqlMapper")
+                                {
+
+                                    if (!filePath.Contains("/obj/") && !filePath.Contains("\\obj\\"))
+                                    {
+                                        list.Add((filePath, line, column));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+                }
             }
-            File.AppendAllText(@"C:\MyFile\temp\error.txt", content);
+            var sourse = BuildSourse(list.Distinct());
+            File.AppendAllText(@"C:\MyFile\temp\error.txt", sourse);
+            context.AddSource("DapperAOTAPITest.g.cs", sourse);
         }
 
-        private SyntaxTree GetCallingSyntaxTree(GeneratorExecutionContext context)
+        string BuildSourse(IEnumerable<(string FilePath, int Line, int Column)> lines)
         {
-            // 在这里添加逻辑以获取调用 Query 方法的语法树
-            // 可以通过 context.Compilation 来获取编译上下文，进而找到调用方的信息
-
-            // 这里假设你的 Query 方法是通过 SyntaxReceiver 找到的
-            SyntaxReceiver syntaxReceiver = context.SyntaxReceiver as SyntaxReceiver;
-            if (syntaxReceiver != null && syntaxReceiver.QueryMethodInvocation != null)
+            var codes = new StringBuilder();
+            foreach (var line in lines)
             {
-                return syntaxReceiver.QueryMethodInvocation.SyntaxTree;
+                codes.AppendLine($"[InterceptsLocation(@\"{line.FilePath}\", {line.Line}, {line.Column})]");
+            }
+            var source = $$"""
+                         using System;
+                         using System.Data;
+                         using System.Runtime.CompilerServices;
+                       
+                         namespace DapperAOTAPITest.Interceptor
+                         {
+                            public static class DapperInterceptor
+                            {                            
+                               {{codes.ToString().Trim('\r', '\n')}}                             
+                               public static IEnumerable<T> InterceptorQuery<T>(this IDbConnection cnn,string sql,object? param=null, IDbTransaction? transaction=null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
+                               {
+                                   var message=$"这是Query拦截器 {sql}";
+                                   Console.WriteLine(message);
+                                   throw new Exception(message);
+                               }
+                            }
+                         }
+                         """;
+            return source;
+        }
+
+        // SyntaxReceiver 用于收集方法调用的信息
+        class SyntaxReceiver : ISyntaxReceiver
+        {
+            public List<InvocationExpressionSyntax> MethodCalls { get; } = new List<InvocationExpressionSyntax>();
+
+            public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+            {
+                // 在这里添加你的语法节点匹配逻辑，以收集目标方法调用的信息
+                if (syntaxNode is InvocationExpressionSyntax invocationSyntax &&
+                    invocationSyntax.Expression is MemberAccessExpressionSyntax memberAccessSyntax &&
+                    memberAccessSyntax.Name.Identifier.ValueText == "Query")
+                {
+                    MethodCalls.Add(invocationSyntax);
+                }
             }
 
-            return null;
+            // 用于返回符合条件的方法调用节点列表
+            public List<InvocationExpressionSyntax> CollectMethodCalls(SyntaxNode rootNode)
+            {
+                var collector = new SyntaxWalker(this);
+                collector.Visit(rootNode);
+                return MethodCalls;
+            }
+        }
+
+        // SyntaxWalker 用于遍历语法树
+        class SyntaxWalker : CSharpSyntaxWalker
+        {
+            private readonly SyntaxReceiver _receiver;
+
+            public SyntaxWalker(SyntaxReceiver receiver)
+            {
+                _receiver = receiver;
+            }
+
+            public override void Visit(SyntaxNode node)
+            {
+                _receiver.OnVisitSyntaxNode(node);
+                base.Visit(node);
+            }
         }
     }
 
-    public class SyntaxReceiver : ISyntaxReceiver
-    {
-        public MethodDeclarationSyntax QueryMethodInvocation { get; private set; }
-
-        public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
-        {
-            // 在这里添加逻辑以找到调用 Query 方法的语法树节点
-            if (syntaxNode is MethodDeclarationSyntax methodSyntax
-                && methodSyntax.Identifier.ValueText == "Query")
-            {
-                QueryMethodInvocation = methodSyntax;
-            }
-        }
-    }
 }
 
