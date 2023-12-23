@@ -66,8 +66,7 @@ namespace DapperAOTGenerator
                     catch { }
                 }
             }
-            var sourse = BuildSourse(list.Distinct());
-            File.AppendAllText(@"C:\MyFile\temp\error.txt", sourse);
+            var sourse = BuildSourse(list.Distinct());          
             context.AddSource("DapperAOTAPITest.g.cs", sourse);
         }
 
