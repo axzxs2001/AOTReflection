@@ -13,8 +13,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 app.MapGet("/test", () =>
 {
-    var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } };
-    InvockMethod(order);
+    var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } }; 
     return GetString(order);
 
 });
@@ -22,12 +21,12 @@ app.MapPost("/test", (Person person) =>
 {
     return GetString(person);
 });
-string GetString<T>(T t) where T : Parent
+string GetString<T>(T t) 
 {
     var sb = new StringBuilder();
     var pros = typeof(T)?.GetProperties();
     foreach (var pro in pros)
-    {      
+    {
         if (pro != null)
         {
             if (pro.PropertyType.IsArray)
@@ -41,7 +40,7 @@ string GetString<T>(T t) where T : Parent
             }
         }
     }
-    t.Print(sb.ToString());
+    InvockMethod(t);
     return sb.ToString();
 }
 
@@ -60,7 +59,7 @@ public partial class AppJsonSerializerContext : JsonSerializerContext
 public partial class Parent
 {
     public void Print(string content)
-    {      
+    {
         Console.WriteLine($"反射类型名：{GetType().Name}，Print参数：{content}");
     }
 }
