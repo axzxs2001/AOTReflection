@@ -31,7 +31,7 @@ namespace AOTReflectionGenerator
                             {{codes}}
                             }
                          }
-                         """;         
+                         """;
             return source;
         }
         IEnumerable<(string NamespaceName, string ClassName)> GetAOTReflectionAttributeTypeDeclarations(GeneratorExecutionContext context)
@@ -59,7 +59,8 @@ namespace AOTReflectionGenerator
             return list;
         }
 
-        public void Initialize(GeneratorInitializationContext context)
+
+   public void Initialize(GeneratorInitializationContext context)
         {
         }
     }

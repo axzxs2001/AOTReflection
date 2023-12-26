@@ -52,7 +52,7 @@ namespace DapperAOTGenerator
                                 // 判断是否是 Dapper 的扩展方法
                                 if (callingType.Name == "SqlMapper")
                                 {
-
+                                    File.AppendAllText(@"C:\MyFile\temp\error.txt", filePath + "\r\n");
                                     if (!filePath.Contains("/obj/") && !filePath.Contains("\\obj\\"))
                                     {
                                         list.Add((filePath, line, column));
@@ -65,8 +65,6 @@ namespace DapperAOTGenerator
                 }
             }
             var sourse = BuildSourse(list);
-            //File.AppendAllText(@"C:\MyFile\temp\error.txt", list.Count.ToString()+"\r\n");
-            //File.AppendAllText(@"C:\MyFile\temp\error.txt", sourse);
             context.AddSource("DapperAOTAPITest.g.cs", sourse);
         }
 
