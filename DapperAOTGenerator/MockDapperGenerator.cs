@@ -1,9 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace DapperAOTGenerator
 {
@@ -30,7 +28,7 @@ namespace DapperAOTGenerator
                 // 获取语法树的根节点
                 var root = syntaxTree.GetRoot();
                 // 获取所有符合条件的方法调用节点
-                var methodCalls = syntaxReceiver.CollectMethodCalls(root);
+                var methodCalls = syntaxReceiver.MethodCalls;
                 foreach (var methodCall in methodCalls)
                 {
                     // 获取调用方的文件路径
@@ -66,7 +64,9 @@ namespace DapperAOTGenerator
                     catch { }
                 }
             }
-            var sourse = BuildSourse(list.Distinct());          
+            var sourse = BuildSourse(list);
+            //File.AppendAllText(@"C:\MyFile\temp\error.txt", list.Count.ToString()+"\r\n");
+            //File.AppendAllText(@"C:\MyFile\temp\error.txt", sourse);
             context.AddSource("DapperAOTAPITest.g.cs", sourse);
         }
 
@@ -113,34 +113,8 @@ namespace DapperAOTGenerator
                 {
                     MethodCalls.Add(invocationSyntax);
                 }
-            }
-
-            // 用于返回符合条件的方法调用节点列表
-            public List<InvocationExpressionSyntax> CollectMethodCalls(SyntaxNode rootNode)
-            {
-                var collector = new SyntaxWalker(this);
-                collector.Visit(rootNode);
-                return MethodCalls;
-            }
-        }
-
-        // SyntaxWalker 用于遍历语法树
-        class SyntaxWalker : CSharpSyntaxWalker
-        {
-            private readonly SyntaxReceiver _receiver;
-
-            public SyntaxWalker(SyntaxReceiver receiver)
-            {
-                _receiver = receiver;
-            }
-
-            public override void Visit(SyntaxNode node)
-            {
-                _receiver.OnVisitSyntaxNode(node);
-                base.Visit(node);
-            }
-        }
+            }        
+        }      
     }
-
 }
 
