@@ -2,7 +2,7 @@
 
 namespace AOTReflectionHelper.Attribute
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct)]
     public partial class AOTReflectionAttribute : System.Attribute
     {
     }

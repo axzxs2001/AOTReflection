@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Attr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.Attribute", "AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj", "{BB68CA18-46A3-4325-9880-78D2A649330C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Interface", "AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj", "{6F355615-D261-4419-A481-D8B0683DA8CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BB68CA18-46A3-4325-9880-78D2A649330C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB68CA18-46A3-4325-9880-78D2A649330C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB68CA18-46A3-4325-9880-78D2A649330C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F355615-D261-4419-A481-D8B0683DA8CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F355615-D261-4419-A481-D8B0683DA8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F355615-D261-4419-A481-D8B0683DA8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F355615-D261-4419-A481-D8B0683DA8CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

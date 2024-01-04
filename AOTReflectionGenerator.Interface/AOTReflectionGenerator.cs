@@ -1,8 +1,10 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+using System;
+using System.Text;
+using System.Runtime.CompilerServices;
 
-namespace AOTReflectionGenerator.Attribute
+namespace AOTReflectionGenerator.Interface
 {
     [Generator]
     public class AOTReflectionGenerator : ISourceGenerator
@@ -11,29 +13,26 @@ namespace AOTReflectionGenerator.Attribute
         {
             var types = GetAOTReflectionAttributeTypeDeclarations(context);
             var source = BuildSourse(types);
-            context.AddSource($"AOTReflectionGenerator.Attribute.g.cs", source);
+            context.AddSource($"AOTReflectionGenerator.g.cs", source);
         }
         string BuildSourse(IEnumerable<(string NamespaceName, string ClassName)> types)
         {
-            var codes = "";
+            var codes = new StringBuilder();
             foreach (var type in types)
             {
-                codes += $"         typeof({(type.NamespaceName != "<global namespace>" ? type.NamespaceName + "." : "")}{type.ClassName}).GetMembers();\r\n";
+                codes.AppendLine($"   typeof({(type.NamespaceName != "<global namespace>" ? type.NamespaceName + "." : "")}{type.ClassName}).GetMembers();");
             }
-            var source = $$"""                        
-                         namespace AOTReflectionHelper.Attribute
+            var source = $$"""
+                         using System;
+                         [AttributeUsage(AttributeTargets.Class)]
+                         public partial class AOTReflectionAttribute:Attribute
                          {
-                            [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct)]
-                            public partial class AOTReflectionAttribute:System.Attribute
+                            public AOTReflectionAttribute()
                             {
-                               public AOTReflectionAttribute()
-                               {
-                         {{codes.TrimEnd('\r', '\n')}}
-                               }
+                            {{codes}}
                             }
                          }
                          """;
-            File.AppendAllText(@"C:\GPT\test.txt", source + "\r\n");
             return source;
         }
         IEnumerable<(string NamespaceName, string ClassName)> GetAOTReflectionAttributeTypeDeclarations(GeneratorExecutionContext context)
@@ -44,7 +43,6 @@ namespace AOTReflectionGenerator.Attribute
                 var semanticModel = context.Compilation.GetSemanticModel(tree);
                 var root = tree.GetRoot(context.CancellationToken);
                 var typeDecls = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
-                //File.AppendAllText(@"C:\GPT\test.txt", typeDecls.Count().ToString());
                 foreach (var decl in typeDecls)
                 {
                     // 获取类型的语义模型
@@ -58,12 +56,17 @@ namespace AOTReflectionGenerator.Attribute
                         list.Add((namespaceName, className));
                     }
                 }
-            }   
+            }
             return list;
         }
+
 
         public void Initialize(GeneratorInitializationContext context)
         {
         }
-    }  
+    }
+
+    public  interface IAOTReflection
+    {        
+    }
 }

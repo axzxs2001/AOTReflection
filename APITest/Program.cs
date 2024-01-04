@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using System.Text;
 using APITest.Models;
-using AOTReflectionHelper.Attribute;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -55,34 +54,4 @@ app.Run();
 [JsonSerializable(typeof(string[]))]
 public partial class AppJsonSerializerContext : JsonSerializerContext
 {
-}
-public partial class Parent
-{
-    public void Print(string content)
-    {
-        Console.WriteLine($"反射类型名：{GetType().Name}，Print参数：{content}");
-    }
-}
-
-[AOTReflection]
-public partial class Order : Parent
-{
-    public string Name { get; set; }
-    public int Age { get; set; }
-    public DateTime Birthday { get; set; }
-    public string[] Hobbies { get; set; }
-}
-
-
-namespace APITest.Models
-{
-    [AOTReflection]
-    public class Person : Parent
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public DateTime Birthday { get; set; }
-        public string[] Hobbies { get; set; }
-
-    }
 }
