@@ -1,6 +1,6 @@
 @APITest_HostAddress = http://localhost:5000
 
-GET {{APITest_HostAddress}}/ref
+GET {{APITest_HostAddress}}/test
 Accept: application/json
 
 ###

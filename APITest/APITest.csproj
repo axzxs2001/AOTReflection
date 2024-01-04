@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AOTReflectionGenerator\AOTReflectionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-		<ProjectReference Include="..\AOTReflectionHelper\AOTReflectionHelper.csproj" />
+		<ProjectReference Include="..\AOTReflectionGenerator.Attribute\AOTReflectionGenerator.Attribute.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj" />
 	</ItemGroup>
 </Project>

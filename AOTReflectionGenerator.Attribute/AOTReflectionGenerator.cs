@@ -1,9 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
 using System.Text;
 
-namespace AOTReflectionGenerator
+namespace AOTReflectionGenerator.Attribute
 {
     [Generator]
     public class AOTReflectionGenerator : ISourceGenerator
@@ -60,7 +59,7 @@ namespace AOTReflectionGenerator
         }
 
 
-   public void Initialize(GeneratorInitializationContext context)
+        public void Initialize(GeneratorInitializationContext context)
         {
         }
     }

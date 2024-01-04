@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using System.Text;
 using APITest.Models;
-using AOTReflectionHelper;
+using AOTReflectionHelper.Attribute;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
