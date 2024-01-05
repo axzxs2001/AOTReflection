@@ -23,7 +23,8 @@
 
 	<ItemGroup>
 		<!--<ProjectReference Include="..\AOTReflectionGenerator.Attribute\AOTReflectionGenerator.Attribute.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
-		<ProjectReference Include="..\AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+		<ProjectReference Include="..\AOTReflectionGenerator.Entity\AOTReflectionGenerator.Entity.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+		<!--<ProjectReference Include="..\AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
 		<ProjectReference Include="..\AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj" />
 		<ProjectReference Include="..\AOTReflectionHelper.Interface\AOTReflectionHelper.Interface.csproj" />
 	</ItemGroup>
