@@ -13,26 +13,25 @@ namespace AOTReflectionGenerator.Interface
         {
             var types = GetAOTReflectionAttributeTypeDeclarations(context);
             var source = BuildSourse(types);
-            context.AddSource($"AOTReflectionGenerator.g.cs", source);
+            context.AddSource($"AOTReflectionGenerator.Interface.g.cs", source);
         }
         string BuildSourse(IEnumerable<(string NamespaceName, string ClassName)> types)
         {
-            var codes = new StringBuilder();
+            var codes ="";
             foreach (var type in types)
             {
-                codes.AppendLine($"   typeof({(type.NamespaceName != "<global namespace>" ? type.NamespaceName + "." : "")}{type.ClassName}).GetMembers();");
+                codes+=($"        typeof({(type.NamespaceName != "<global namespace>" ? type.NamespaceName + "." : "")}{type.ClassName}).GetMembers();\r\n");
             }
-            var source = $$"""
-                         using System;
-                         [AttributeUsage(AttributeTargets.Class)]
-                         public partial class AOTReflectionAttribute:Attribute
+            var source = $$"""                        
+                         public partial class AppJsonSerializerContext
                          {
-                            public AOTReflectionAttribute()
-                            {
-                            {{codes}}
-                            }
+                             public override int GetHashCode()
+                             {
+                         {{codes.TrimEnd('\r','\n')}}
+                                 return base.GetHashCode();
+                             }
                          }
-                         """;
+                         """;            
             return source;
         }
         IEnumerable<(string NamespaceName, string ClassName)> GetAOTReflectionAttributeTypeDeclarations(GeneratorExecutionContext context)
@@ -44,17 +43,17 @@ namespace AOTReflectionGenerator.Interface
                 var root = tree.GetRoot(context.CancellationToken);
                 var typeDecls = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
                 foreach (var decl in typeDecls)
-                {
-                    // 获取类型的语义模型
-                    var symbol = semanticModel.GetDeclaredSymbol(decl);
-                    // 检查类型是否带有 AOTReflectionAttribute 特性
-                    if (symbol?.GetAttributes().Any(attr => attr.AttributeClass?.Name == "AOTReflectionAttribute") == true)
+                {                   
+                    var symbol = semanticModel.GetDeclaredSymbol(decl);                    
+                    if(symbol is ITypeSymbol typeSymbol)
                     {
-                        // 处理带有 AOTReflectionAttribute 特性的类型
-                        var className = decl.Identifier.ValueText;
-                        var namespaceName = symbol.ContainingNamespace?.ToDisplayString();
-                        list.Add((namespaceName, className));
-                    }
+                        if (typeSymbol.Interfaces.Any(i => i.Name == "IAOTReflection"))
+                        {
+                            var className = decl.Identifier.ValueText;
+                            var namespaceName = symbol.ContainingNamespace?.ToDisplayString();
+                            list.Add((namespaceName, className));
+                        }
+                    }                   
                 }
             }
             return list;
@@ -64,9 +63,5 @@ namespace AOTReflectionGenerator.Interface
         public void Initialize(GeneratorInitializationContext context)
         {
         }
-    }
-
-    public  interface IAOTReflection
-    {        
     }
 }

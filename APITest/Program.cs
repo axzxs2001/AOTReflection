@@ -12,7 +12,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 app.MapGet("/test", () =>
 {
-    var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } }; 
+    var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } };
     return GetString(order);
 
 });
@@ -20,7 +20,7 @@ app.MapPost("/test", (Person person) =>
 {
     return GetString(person);
 });
-string GetString<T>(T t) 
+string GetString<T>(T t)
 {
     var sb = new StringBuilder();
     var pros = typeof(T)?.GetProperties();
@@ -48,10 +48,21 @@ void InvockMethod<T>(T t)
     var method = typeof(T)?.GetMethod("Print");
     method?.Invoke(t, new object[] { "用反射调用Print" });
 }
+
+app.MapGet("/item", () =>
+{
+    var order = new Item { ID = 1000001, Name = "选项名称" };
+    return GetString(order);
+
+});
+
+
 app.Run();
+
 
 [JsonSerializable(typeof(Person))]
 [JsonSerializable(typeof(string[]))]
 public partial class AppJsonSerializerContext : JsonSerializerContext
 {
 }
+

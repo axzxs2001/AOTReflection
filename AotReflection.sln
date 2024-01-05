@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.Attribu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Interface", "AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj", "{6F355615-D261-4419-A481-D8B0683DA8CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.Interface", "AOTReflectionHelper.Interface\AOTReflectionHelper.Interface.csproj", "{AF99B240-64C7-4313-86FC-B34A8153ABF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6F355615-D261-4419-A481-D8B0683DA8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F355615-D261-4419-A481-D8B0683DA8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F355615-D261-4419-A481-D8B0683DA8CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF99B240-64C7-4313-86FC-B34A8153ABF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF99B240-64C7-4313-86FC-B34A8153ABF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF99B240-64C7-4313-86FC-B34A8153ABF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF99B240-64C7-4313-86FC-B34A8153ABF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
