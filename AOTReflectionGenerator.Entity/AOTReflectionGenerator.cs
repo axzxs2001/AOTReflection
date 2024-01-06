@@ -28,8 +28,7 @@ namespace AOTReflectionGenerator.Entity
                                  return base.GetHashCode();
                              }
                          }
-                         """;
-            File.AppendAllText(@"C:\GPT\test.txt", source);
+                         """;  
             return source;
         }
         IEnumerable<(string NamespaceName, string ClassName)> GetAOTReflectionAttributeTypeDeclarations(GeneratorExecutionContext context)

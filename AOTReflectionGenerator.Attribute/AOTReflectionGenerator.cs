@@ -32,8 +32,7 @@ namespace AOTReflectionGenerator.Attribute
                                }
                             }
                          }
-                         """;
-            File.AppendAllText(@"C:\GPT\test.txt", source + "\r\n");
+                         """;           
             return source;
         }
         IEnumerable<(string NamespaceName, string ClassName)> GetAOTReflectionAttributeTypeDeclarations(GeneratorExecutionContext context)
@@ -43,8 +42,7 @@ namespace AOTReflectionGenerator.Attribute
             {
                 var semanticModel = context.Compilation.GetSemanticModel(tree);
                 var root = tree.GetRoot(context.CancellationToken);
-                var typeDecls = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
-                //File.AppendAllText(@"C:\GPT\test.txt", typeDecls.Count().ToString());
+                var typeDecls = root.DescendantNodes().OfType<TypeDeclarationSyntax>();            
                 foreach (var decl in typeDecls)
                 {
                     // 获取类型的语义模型
