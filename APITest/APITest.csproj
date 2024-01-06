@@ -7,34 +7,19 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<PublishAot>true</PublishAot>
 
-
-		<!--<AutoreleasePoolSupport>false</AutoreleasePoolSupport>-->
-		<!--<DebuggerSupport>false</DebuggerSupport>-->
-		<!--<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>-->
-		<!--<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>-->
 		<EventSourceSupport>false</EventSourceSupport>
-		<!--<HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>-->
-		<!--<InvariantGlobalization>true</InvariantGlobalization>-->
-		<!--<MetadataUpdaterSupport>false</MetadataUpdaterSupport>-->
 		<StackTraceSupport>false</StackTraceSupport>
-		<!--<UseNativeHttpHandler>true</UseNativeHttpHandler>-->
 		<UseSystemResourceKeys>true</UseSystemResourceKeys>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AOTReflectionGenerator.Attribute" Version="0.1.0.3" />
-
-
-
-		<!-- Package the generator in the analyzer directory of the nuget package -->
-		<None Include="$(OutputPath)\AOTReflectionGenerator.Attribute.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-
-
+		<PackageReference Include="AOTReflectionGenerator.Attribute" Version="0.1.1"  />
 		<!--<ProjectReference Include="..\AOTReflectionGenerator.Attribute\AOTReflectionGenerator.Attribute.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
 		<!--<ProjectReference Include="..\AOTReflectionGenerator.Entity\AOTReflectionGenerator.Entity.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>-->
 		<!--<ProjectReference Include="..\AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
 		<ProjectReference Include="..\AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj" />
 		<ProjectReference Include="..\AOTReflectionHelper.Interface\AOTReflectionHelper.Interface.csproj" />
 	</ItemGroup>
+
 </Project>

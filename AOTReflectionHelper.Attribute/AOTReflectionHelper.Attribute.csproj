@@ -2,6 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<Version>0.1.1.0</Version>
+		<Authors>GuiSuWei</Authors>
+		<Company>GuiSuWei</Company>
+		<Description>In AOT projects, utilizing reflection poses several obstacles. This software package leverages source generation to proactively obtain metadata for specific types along different dimensions, thereby enabling smoother utilization of certain Reflection functionalities. For detailed usage instructions, please refer to https://github.com/axzxs2001/AOTReflection.</Description>
+		<PackageProjectUrl>https://github.com/axzxs2001/AOTReflection</PackageProjectUrl>
 	</PropertyGroup>
 
 </Project>
