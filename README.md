@@ -1,6 +1,6 @@
 # AOTReflection
 
- [English Readme](README_en.md/)
+ [English](README_en.md/)
 
 在AOT项目中，使用反射有很问题，本程序包利用源生成器，按不同的维度，提前获取对应类型的元数据，从而达到平滑使用Reflection部分功能。
 
