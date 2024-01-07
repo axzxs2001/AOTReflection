@@ -38,11 +38,18 @@ void InvockMethod<T>(T t)
 **Explanation: This example is implemented based on the AOT template of MiniAPI.**
 
 ## AOTReflectionGenerator.Attribute
-1. In an AOT project, install the AOTReflectionGenerator.Attribute and AOTReflectionHelper.Attribute attributes.
-> dotnet add package AOTReflectionGenerator.Attribute --version 0.1.1
-
-> dotnet add package AOTReflectionHelper.Attribute --version 0.1.1
-2. When defining entity classes, add the [AOTReflectionHelper.Attribute.AOTReflection] attribute to the classes that require reflection.
+1. In the AOT project, install the AOTReflectionGenerator.Attribute NuGet package.
+2. Define the AOTReflectionAttribute in the AOT project.
+```C#
+namespace AOTReflectionHelper.Attribute
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public partial class AOTReflectionAttribute : System.Attribute
+    {
+    }
+}
+```
+3. When defining entity classes, add the [AOTReflectionHelper.Attribute.AOTReflection] attribute to the classes that require reflection.
 ```C#
 public class Parent
 {
@@ -68,7 +75,7 @@ public class Person : Parent
     public string[] Hobbies { get; set; }
 }
 ```
-3. Now you can use basic reflection functionalities in a generic way, such as the GetString<T>(T t) method.
+4. Now you can use basic reflection functionalities in a generic way, such as the GetString<T>(T t) method.
 ```C#
 app.MapGet("/testattribute", () =>
 {
@@ -83,12 +90,17 @@ app.MapPost("/testattribute", (Person person) =>
 ```
 
 ## AOTReflectionGenerator.Interface
-1. In an AOT project, install the AOTReflectionGenerator.Interface and AOTReflectionHelper.Interface packages.
-> dotnet add package AOTReflectionGenerator.Interface --version 0.1.1
-
-> dotnet add package AOTReflectionHelper.Interface --version 0.1.1
-
-2. When defining entity classes, simply inherit the IAOTReflection interface.
+1. In the AOT project, install the AOTReflectionGenerator.Attribute NuGet package.
+2. Define the IAOTReflection interface in the AOT project.
+```C#
+namespace AOTReflectionHelper.Interface
+{
+    public interface IAOTReflection
+    {
+    }
+}
+```
+3. When defining entity classes, simply inherit the IAOTReflection interface.
 ```C#
 public class Item : IAOTReflection
 {
@@ -104,7 +116,7 @@ public enum Sex
 }
 ```
 
-3. Now you can use basic reflection functionalities in a generic way, such as the GetString<T>(T t) method.
+4. Now you can use basic reflection functionalities in a generic way, such as the GetString<T>(T t) method.
 ```C#
 app.MapGet("/testinterface", () =>
 {
@@ -136,5 +148,32 @@ This is a test for AOT reflection entity classes." };
 
 });
 ```
-
-It's important to note that both AOTReflectionGenerator.Interface and AOTReflectionGenerator.Entity are based on the **MiniAPI AOT project template's** partial class AppJsonSerializerContext. The specific implementation involves overriding the public override int GetHashCode() method in the source generator to achieve reflection metadata retrieval. Therefore, **AOTReflectionGenerator.Interface and AOTReflectionGenerator.Entity cannot be used simultaneously**.
+## AOTReflectionGenerator.MethodAttribute
+1. In the AOT project, install the AOTReflectionGenerator.MethodAttribute NuGet package.
+2. Define the AOTReflectionMethodAttribute in the AOT project.
+```C#
+namespace AOTReflectionHelper.MethodAttribute
+{
+    [AttributeUsage(AttributeTargets.Method)]
+    public class AOTReflectionMethodAttribute : System.Attribute
+    {      
+    }
+}
+```
+3. Add the [AOTReflectionHelper.MethodAttribute.AOTReflectionMethod] attribute to the GetString<T>(T t) method to ensure that the source generator generates metadata for the type T used in the method.
+```C#
+[AOTReflectionHelper.MethodAttribute.AOTReflectionMethod]
+string GetString<T>(T t)
+{
+  // ...
+}
+```
+4. You can now use basic reflection functionalities in a generic way, such as the GetString<T>(T t) method.
+```C#
+app.MapGet("/testmethodattribute", () =>
+{
+    var testMethodAtt = new TestMethodAtt { Name = "John Doe" };
+    return GetString(testMethodAtt);
+});
+```
+Note that AOTReflectionGenerator.Interface, AOTReflectionGenerator.Entity, and AOTReflectionGenerator.MethodAttribute cannot be used simultaneously as they are all based on the MiniAPI AOT project template and involve partial classes of AppJsonSerializerContext. The implementation is done by overriding the GetHashCode method in the source generator for the AppJsonSerializerContext class to fetch reflection metadata.
