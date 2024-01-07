@@ -7,6 +7,28 @@
 		<Company>GuiSuWei</Company>
 		<Description>In AOT projects, utilizing reflection poses several obstacles. This software package leverages source generation to proactively obtain metadata for specific types along different dimensions, thereby enabling smoother utilization of certain Reflection functionalities. For detailed usage instructions, please refer to https://github.com/axzxs2001/AOTReflection.</Description>
 		<PackageProjectUrl>https://github.com/axzxs2001/AOTReflection</PackageProjectUrl>
+		<PackageIcon>Log_small.png</PackageIcon>
+		<PackageReadmeFile>nuget_read.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/axzxs2001/AOTReflection.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>In AOT projects, utilizing reflection poses several obstacles. This software package leverages source generation to proactively obtain metadata for specific types along different dimensions, thereby enabling smoother utilization of certain Reflection functionalities. For detailed usage instructions, please refer to https://github.com/axzxs2001/AOTReflection.</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Title>AOTReflectionHelper.Attribute</Title>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\Log_small.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\nuget_read.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>

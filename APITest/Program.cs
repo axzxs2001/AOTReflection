@@ -10,16 +10,31 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 var app = builder.Build();
-app.MapGet("/test", () =>
+app.MapGet("/testattribute", () =>
 {
     var order = new Order { Name = "桂素伟", Age = 10, Birthday = DateTime.Now, Hobbies = new string[] { "足球", "代码" } };
     return GetString(order);
 
 });
-app.MapPost("/test", (Person person) =>
+app.MapPost("/testattribute", (Person person) =>
 {
     return GetString(person);
 });
+
+app.MapGet("/testinterface", () =>
+{
+    var item = new Item { ID = 1000001, Name = "选项名称" };
+    return GetString(item);
+
+});
+
+app.MapGet("/testentity", () =>
+{
+    var entity = new Entity { Name = "实体类",Description="这是AOT反射的实体类测试" };
+    return GetString(entity);
+
+});
+
 string GetString<T>(T t)
 {
     var sb = new StringBuilder();
@@ -49,12 +64,7 @@ void InvockMethod<T>(T t)
     method?.Invoke(t, new object[] { "用反射调用Print" });
 }
 
-app.MapGet("/item", () =>
-{
-    var order = new Item { ID = 1000001, Name = "选项名称" };
-    return GetString(order);
 
-});
 
 
 app.Run();
