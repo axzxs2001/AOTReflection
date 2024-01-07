@@ -35,7 +35,7 @@ void InvockMethod<T>(T t)
 }
 ```
 
-**Explanation: The implementation is based on the MiniAPI AOT template locally.**
+**Explanation: This example is implemented based on the AOT template of MiniAPI.**
 
 ## AOTReflectionGenerator.Attribute
 1. In an AOT project, install the AOTReflectionGenerator.Attribute and AOTReflectionHelper.Attribute attributes.
