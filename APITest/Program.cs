@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using System.Text;
 using APITest.Models;
-using AOTReflectionHelper.MethodAttribute;
+
+
+
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -24,26 +26,26 @@ app.MapPost("/testattribute", (Person person) =>
 
 app.MapGet("/testinterface", () =>
 {
-    var item = new Item { ID = 1000001, Name = "选项名称" };   
+    var item = new Item { ID = 1000001, Name = "选项名称" };
     return GetString(item);
 
 });
 
 app.MapGet("/testentity", () =>
 {
-    var entity = new Entity { Name = "实体类",Description="这是AOT反射的实体类测试" };
+    var entity = new Entity { Name = "实体类", Description = "这是AOT反射的实体类测试" };
     return GetString(entity);
 
 });
 
 app.MapGet("/testmethodattribute", () =>
 {
-    var testMehtodAtt = new TestMehtodAtt { Name = "桂素伟"};
+    var testMehtodAtt = new TestMehtodAtt { Name = "桂素伟" };
     return GetString(testMehtodAtt);
 
 });
 
-[AOTReflectionMethod]
+[AOTReflectionHelper.MethodAttribute.AOTReflectionMethod]
 string GetString<T>(T t)
 {
     var sb = new StringBuilder();
@@ -89,5 +91,31 @@ class TestMehtodAtt
 {
     public string Name { get; set; }
 
+}
+
+
+
+
+namespace AOTReflectionHelper.Attribute
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public partial class AOTReflectionAttribute : System.Attribute
+    {
+    }
+}
+namespace AOTReflectionHelper.Interface
+{
+    public interface IAOTReflection
+    {
+    }
+}
+
+namespace AOTReflectionHelper.MethodAttribute
+{
+    [AttributeUsage(AttributeTargets.Method)]
+    public class AOTReflectionMethodAttribute : System.Attribute
+    {
+      
+    }
 }
 

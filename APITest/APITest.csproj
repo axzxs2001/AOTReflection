@@ -14,15 +14,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<PackageReference Include="AOTReflectionGenerator.Attribute" Version="0.1.1" />-->
-		<!--<PackageReference Include="AOTReflectionGenerator.Entity" Version="0.1.1" />-->
-		<PackageReference Include="AOTReflectionGenerator.MethodAttribute" Version="0.1.1.1" />
-		<!--<PackageReference Include="AOTReflectionGenerator.Interface" Version="0.1.1" />-->
-		<PackageReference Include="AOTReflectionHelper.Attribute" Version="0.1.1" />
-		<PackageReference Include="AOTReflectionHelper.Interface" Version="0.1.1" />
-		<PackageReference Include="AOTReflectionHelper.MethodAttribute" Version="0.1.1" />
-		<!--<ProjectReference Include="..\AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
+	  <PackageReference Include="AOTReflectionGenerator.Entity" Version="0.2.0" />
 	</ItemGroup>
 
+
+	<!--<ItemGroup>
+		<ProjectReference Include="..\AOTReflectionGenerator.MethodAttribute\AOTReflectionGenerator.MethodAttribute.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+	</ItemGroup>-->
 
 </Project>

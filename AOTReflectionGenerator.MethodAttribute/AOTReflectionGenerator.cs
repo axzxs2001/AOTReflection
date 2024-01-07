@@ -11,7 +11,7 @@ namespace AOTReflectionGenerator.MethodAttribute
         {
             var types = GetAOTReflectionMethodAttributeTypeDeclarations(context);
             var source = BuildSourse(types);
-            context.AddSource($"AOTReflectionGenerator.Attribute.g.cs", source);
+            context.AddSource($"AOTReflectionGenerator.MethodAttribute.g.cs", source);
         }
         string BuildSourse(IEnumerable<string> types)
         {
@@ -21,18 +21,15 @@ namespace AOTReflectionGenerator.MethodAttribute
                 codes += $"         typeof({type}).GetMembers();\r\n";
             }
             var source = $$"""                        
-                         namespace AOTReflectionHelper.MethodAttribute
+                         public partial class AppJsonSerializerContext
                          {
-                            [AttributeUsage(AttributeTargets.Method)]
-                            public partial class AOTReflectionMethodAttribute:System.Attribute
-                            {
-                               public AOTReflectionMethodAttribute()
-                               {
+                             public override int GetHashCode()
+                             {
                          {{codes.TrimEnd('\r', '\n')}}
-                               }
-                            }
+                                 return base.GetHashCode();
+                             }
                          }
-                         """;
+                         """;          
             return source;
         }
         IEnumerable<string> GetAOTReflectionMethodAttributeTypeDeclarations(GeneratorExecutionContext context)
@@ -55,23 +52,24 @@ namespace AOTReflectionGenerator.MethodAttribute
                     if (methodSymbol?.GetAttributes().Any(a => a.AttributeClass.Name == "AOTReflectionMethodAttribute") == true)
                     {
                         // 获取泛型类型
-                        var genericType = GetGenericType(methodCall, semanticModel);
-
-                        list.Add(genericType);
+                        var genericTypes = GetGenericType(methodCall, semanticModel);
+                        list.AddRange(genericTypes);
                     }
                 }
             }
             return list;
         }
-        static string GetGenericType(InvocationExpressionSyntax methodCall, SemanticModel semanticModel)
+        static string[] GetGenericType(InvocationExpressionSyntax methodCall, SemanticModel semanticModel)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(methodCall);
             var methodSymbol = symbolInfo.Symbol as IMethodSymbol;
 
-            // 获取泛型类型参数
-            var genericType = methodSymbol?.TypeArguments.FirstOrDefault()?.ToDisplayString();
-
-            return genericType;
+            var list = new List<string>();
+            foreach (var typeArgument in methodSymbol?.TypeArguments)
+            {
+                list.Add(typeArgument.ToDisplayString());
+            }
+            return list.ToArray();
         }
 
 
@@ -79,5 +77,5 @@ namespace AOTReflectionGenerator.MethodAttribute
         {
         }
     }
- 
+
 }

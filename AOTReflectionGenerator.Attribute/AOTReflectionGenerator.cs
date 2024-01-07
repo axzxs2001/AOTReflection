@@ -20,10 +20,10 @@ namespace AOTReflectionGenerator.Attribute
             {
                 codes += $"         typeof({(type.NamespaceName != "<global namespace>" ? type.NamespaceName + "." : "")}{type.ClassName}).GetMembers();\r\n";
             }
-            var source = $$"""                        
+            var source = $$"""
+                         using System;
                          namespace AOTReflectionHelper.Attribute
-                         {
-                            [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct)]
+                         {                            
                             public partial class AOTReflectionAttribute:System.Attribute
                             {
                                public AOTReflectionAttribute()
