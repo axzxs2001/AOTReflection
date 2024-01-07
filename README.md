@@ -36,7 +36,7 @@ void InvockMethod<T>(T t)
 }
 ```
 
-**说明：本地都是基于MiniAPI的AOT模版来实现的。**
+**说明：本例都是基于MiniAPI的AOT模版来实现的。**
 
 ## AOTReflectionGenerator.Attribute
 1. 在AOT项目中，安装AOTReflectionGenerator.Attribute和AOTReflectionHelper.Attribute
