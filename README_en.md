@@ -1,4 +1,6 @@
 # AOTReflection
+ [中文](README_en.md/)
+
 In the AOT project, there are issues with using reflection. This program package utilizes source generators to pre-fetch metadata for different types based on various dimensions. This approach aims to achieve smoother utilization of reflection-related functionalities.
 
 The following code utilizes generic reflection for flexibility. However, when published as AOT, it's observed that the return value of GetString is empty (Note: local debugging returns results). This program package addresses and resolves this issue.
