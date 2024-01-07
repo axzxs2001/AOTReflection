@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>12.0</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>AOTReflectionGenerator.MethodAttribute</Title>
+		<Company>GuiSuWei</Company>
+		<PackageProjectUrl>https://github.com/axzxs2001/AOTReflection</PackageProjectUrl>
+		<PackageIcon>Log_small.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<AssemblyVersion></AssemblyVersion>
+		<FileVersion></FileVersion>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>0.1.1.1</Version>
+		<RepositoryUrl>https://github.com/axzxs2001/AOTReflection.git</RepositoryUrl>
+		<PackageReleaseNotes>In AOT projects, utilizing reflection poses several obstacles. This software package leverages source generation to proactively obtain metadata for specific types along different dimensions, thereby enabling smoother utilization of certain Reflection functionalities. For detailed usage instructions, please refer to https://github.com/axzxs2001/AOTReflection.</PackageReleaseNotes>
+		<Description>In AOT projects, utilizing reflection poses several obstacles. This software package leverages source generation to proactively obtain metadata for specific types along different dimensions, thereby enabling smoother utilization of certain Reflection functionalities. For detailed usage instructions, please refer to https://github.com/axzxs2001/AOTReflection. </Description>
+		<Authors>GuiSuWei</Authors>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<PackageReadmeFile>nuget_read.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Package the generator in the analyzer directory of the nuget package -->
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Log_small.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\nuget_read.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23525.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final" />
+	</ItemGroup>
+
+
+
+</Project>

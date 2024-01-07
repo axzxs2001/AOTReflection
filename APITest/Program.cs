@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using System.Text;
 using APITest.Models;
+using AOTReflectionHelper.MethodAttribute;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -23,7 +24,7 @@ app.MapPost("/testattribute", (Person person) =>
 
 app.MapGet("/testinterface", () =>
 {
-    var item = new Item { ID = 1000001, Name = "选项名称" };
+    var item = new Item { ID = 1000001, Name = "选项名称" };   
     return GetString(item);
 
 });
@@ -35,6 +36,14 @@ app.MapGet("/testentity", () =>
 
 });
 
+app.MapGet("/testmethodattribute", () =>
+{
+    var testMehtodAtt = new TestMehtodAtt { Name = "桂素伟"};
+    return GetString(testMehtodAtt);
+
+});
+
+[AOTReflectionMethod]
 string GetString<T>(T t)
 {
     var sb = new StringBuilder();
@@ -74,5 +83,11 @@ app.Run();
 [JsonSerializable(typeof(string[]))]
 public partial class AppJsonSerializerContext : JsonSerializerContext
 {
+}
+
+class TestMehtodAtt
+{
+    public string Name { get; set; }
+
 }
 

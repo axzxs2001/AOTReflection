@@ -5,15 +5,19 @@ VisualStudioVersion = 17.9.34407.89
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APITest", "APITest\APITest.csproj", "{A5B37164-7C3A-4C1F-8388-F1F4E821B6BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Attribute", "AOTReflectionGenerator.Attribute\AOTReflectionGenerator.Attribute.csproj", "{249357B0-9C26-4CAD-A302-78890DDA8471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionGenerator.Attribute", "AOTReflectionGenerator.Attribute\AOTReflectionGenerator.Attribute.csproj", "{249357B0-9C26-4CAD-A302-78890DDA8471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.Attribute", "AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj", "{BB68CA18-46A3-4325-9880-78D2A649330C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionHelper.Attribute", "AOTReflectionHelper.Attribute\AOTReflectionHelper.Attribute.csproj", "{BB68CA18-46A3-4325-9880-78D2A649330C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Interface", "AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj", "{6F355615-D261-4419-A481-D8B0683DA8CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionGenerator.Interface", "AOTReflectionGenerator.Interface\AOTReflectionGenerator.Interface.csproj", "{6F355615-D261-4419-A481-D8B0683DA8CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.Interface", "AOTReflectionHelper.Interface\AOTReflectionHelper.Interface.csproj", "{AF99B240-64C7-4313-86FC-B34A8153ABF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionHelper.Interface", "AOTReflectionHelper.Interface\AOTReflectionHelper.Interface.csproj", "{AF99B240-64C7-4313-86FC-B34A8153ABF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.Entity", "AOTReflectionGenerator.Entity\AOTReflectionGenerator.Entity.csproj", "{9A644704-BA75-4BF5-94C7-41C8AC6D2CF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AOTReflectionGenerator.Entity", "AOTReflectionGenerator.Entity\AOTReflectionGenerator.Entity.csproj", "{9A644704-BA75-4BF5-94C7-41C8AC6D2CF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionGenerator.MethodAttribute", "AOTReflectionGenerator.MethodAttribute\AOTReflectionGenerator.MethodAttribute.csproj", "{828C89C2-4962-4C3D-BD1A-86C52A70B54B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOTReflectionHelper.MethodAttribute", "AOTReflectionHelper.MethodAttribute\AOTReflectionHelper.MethodAttribute.csproj", "{9ADF2F30-EFF4-43DD-B96B-880C3512BBB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{9A644704-BA75-4BF5-94C7-41C8AC6D2CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A644704-BA75-4BF5-94C7-41C8AC6D2CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A644704-BA75-4BF5-94C7-41C8AC6D2CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{828C89C2-4962-4C3D-BD1A-86C52A70B54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{828C89C2-4962-4C3D-BD1A-86C52A70B54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{828C89C2-4962-4C3D-BD1A-86C52A70B54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{828C89C2-4962-4C3D-BD1A-86C52A70B54B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ADF2F30-EFF4-43DD-B96B-880C3512BBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADF2F30-EFF4-43DD-B96B-880C3512BBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADF2F30-EFF4-43DD-B96B-880C3512BBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADF2F30-EFF4-43DD-B96B-880C3512BBB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
