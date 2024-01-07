@@ -39,11 +39,20 @@ void InvockMethod<T>(T t)
 **说明：本例都是基于MiniAPI的AOT模版来实现的。**
 
 ## AOTReflectionGenerator.Attribute
-1. 在AOT项目中，安装AOTReflectionGenerator.Attribute和AOTReflectionHelper.Attribute
-> dotnet add package AOTReflectionGenerator.Attribute --version 0.1.1
+1. 在AOT项目中，安装AOTReflectionGenerator.Attribute nuget包
+   
+2. 在AOT项目中定义AOTReflectionAttribute
+```C#
+namespace AOTReflectionHelper.Attribute
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    public partial class AOTReflectionAttribute : System.Attribute
+    {
+    }
+}
+```
 
-> dotnet add package AOTReflectionHelper.Attribute --version 0.1.1
-2. 定义实体类时，把需要Reflection的类加上[AOTReflectionHelper.Attribute.AOTReflection]特性
+3. 定义实体类时，把需要Reflection的类加上[AOTReflectionHelper.Attribute.AOTReflection]特性
 ```C#
 public class Parent
 {
@@ -53,7 +62,7 @@ public class Parent
     }
 }
 [AOTReflectionHelper.Attribute.AOTReflection]
-public struct Order //: Parent
+public struct Order
 {
     public string Name { get; set; }
     public int Age { get; set; }
@@ -69,7 +78,7 @@ public class Person : Parent
     public string[] Hobbies { get; set; }
 }
 ```
-3. 这时就可以按照泛型的方式来使用基本的反射功能了，如GetString<T>(T t)方法
+4. 这时就可以按照泛型的方式来使用基本的反射功能了，如GetString<T>(T t)方法
 ```C#
 app.MapGet("/testattribute", () =>
 {
@@ -84,12 +93,19 @@ app.MapPost("/testattribute", (Person person) =>
 ```
 
 ## AOTReflectionGenerator.Interface
-1. 在AOT项目中，安装AOTReflectionGenerator.Interface和AOTReflectionHelper.Interface
-> dotnet add package AOTReflectionGenerator.Interface --version 0.1.1
+1. 在AOT项目中，安装AOTReflectionGenerator.Interface nuget包
 
-> dotnet add package AOTReflectionHelper.Interface --version 0.1.1
+2. 在ATO项目中定义接口IAOTReflection
+```C#
+namespace AOTReflectionHelper.Interface
+{
+    public interface IAOTReflection
+    {
+    }
+}
+```
 
-2. 定义实体类时，继承IAOTReflection接口即可
+3. 定义实体类时，继承IAOTReflection接口即可
 ```C#
 public class Item : IAOTReflection
 {
@@ -105,7 +121,7 @@ public enum Sex
 }
 ```
 
-3. 这时就可以按照泛型的方式来使用基本的反射功能了，如GetString<T>(T t)方法
+4. 这时就可以按照泛型的方式来使用基本的反射功能了，如GetString<T>(T t)方法
 ```C#
 app.MapGet("/testinterface", () =>
 {
@@ -137,6 +153,36 @@ app.MapGet("/testentity", () =>
 });
 ```
 
-需要注意的是，AOTReflectionGenerator.Interface和AOTReflectionGenerator.Entity都是基于**MiniAPI AOT项目模版**的分部类AppJsonSerializerContext。具体实现是在源生成器中重写了AppJsonSerializerContext类的public override int GetHashCode()方法来完成反射元数据获取的，所以**AOTReflectionGenerator.Interface和AOTReflectionGenerator.Entity也不能同时使用**。
+## AOTReflectionGenerator.MethodAttribute
+1. 在AOT项目中，安装AOTReflectionGenerator.MethodAttribute nuget包
+   
+2. 在AOT项目中定义AOTReflectionMethodAttribute
+```C#
+namespace AOTReflectionHelper.MethodAttribute
+{
+    [AttributeUsage(AttributeTargets.Method)]
+    public class AOTReflectionMethodAttribute : System.Attribute
+    {      
+    }
+}
+```
 
+3. 给GetString<T>(T t)方法增加特性[AOTReflectionHelper.MethodAttribute.AOTReflectionMethod]特性，为了让源生成器把所有调用了GetString<T>(T t)中的T提前生成元数据
+```C#
+[AOTReflectionHelper.MethodAttribute.AOTReflectionMethod]
+string GetString<T>(T t)
+{
+  ……
+}
+```
+4. 这时就可以按照泛型的方式来使用基本的反射功能了，如GetString<T>(T t)方法
+```C#
+app.MapGet("/testmethodattribute", () =>
+{
+    var testMehtodAtt = new TestMehtodAtt { Name = "桂素伟" };
+    return GetString(testMehtodAtt);
 
+});
+```
+
+需要注意的是，AOTReflectionGenerator.Interface，AOTReflectionGenerator.Entity，AOTReflectionGenerator.MethodAttribute都是基于**MiniAPI AOT项目模版**的分部类AppJsonSerializerContext。具体实现是在源生成器中重写了AppJsonSerializerContext类的public override int GetHashCode()方法来完成反射元数据获取的，所以**AOTReflectionGenerator.Interface、AOTReflectionGenerator.Entity、AOTReflectionGenerator.MethodAttribute也不能同时使用**。
